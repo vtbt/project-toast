@@ -4,28 +4,37 @@ import { useEscapeKey } from '../../hooks';
 export const ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
-  const [toastList, setToastList] = React.useState([]);
+  const [toasts, setToasts] = React.useState([]);
 
-  function addNewToast(newToast) {
-    setToastList([...toastList, newToast]);
+  function createToast(message, variant) {
+    const nextToasts = [
+      ...toasts,
+      {
+        id: crypto.randomUUID(),
+        message,
+        variant,
+      },
+    ];
+
+    setToasts(nextToasts);
   }
 
-  function handleDismissToast(toastId) {
-    // without toastId we will dismiss all toasts
-    if (toastId === undefined) {
-      setToastList([]);
-      return;
-    }
-    const newToastList = toastList.filter((toast) => toast.id !== toastId);
-    setToastList(newToastList);
+  function dismissToast(id) {
+    const nextToasts = toasts.filter((toast) => {
+      return toast.id !== id;
+    });
+    setToasts(nextToasts);
   }
 
-  useEscapeKey(handleDismissToast);
+  const handleEscape = React.useCallback(() => {
+    setToasts([]);
+  }, []);
+
+  useEscapeKey(handleEscape);
+  //   useEscapeKey(() => setToasts([]));
 
   return (
-    <ToastContext.Provider
-      value={{ toastList, addNewToast, handleDismissToast }}
-    >
+    <ToastContext.Provider value={{ toasts, createToast, dismissToast }}>
       {children}
     </ToastContext.Provider>
   );

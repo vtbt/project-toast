@@ -14,16 +14,11 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
 
-  const { addNewToast } = React.useContext(ToastContext);
+  const { createToast } = React.useContext(ToastContext);
 
   function handlePopToast(event) {
     event.preventDefault();
-    const newToast = {
-      id: crypto.randomUUID(),
-      message,
-      variant,
-    };
-    addNewToast(newToast);
+    createToast(message, variant);
     setMessage('');
     setVariant(VARIANT_OPTIONS[0]);
   }
@@ -60,21 +55,25 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            {VARIANT_OPTIONS.map((option) => (
-              <label key={option} htmlFor={option}>
-                <input
-                  id={option}
-                  type="radio"
-                  name="variant"
-                  value={option}
-                  checked={option === variant}
-                  onChange={(event) => {
-                    setVariant(event.target.value);
-                  }}
-                />
-                {option}
-              </label>
-            ))}
+            {VARIANT_OPTIONS.map((option) => {
+              const id = `variant-${option}`;
+
+              return (
+                <label key={id} htmlFor={id}>
+                  <input
+                    id={id}
+                    type="radio"
+                    name="variant"
+                    value={option}
+                    checked={option === variant}
+                    onChange={(event) => {
+                      setVariant(event.target.value);
+                    }}
+                  />
+                  {option}
+                </label>
+              );
+            })}
           </div>
         </div>
 
