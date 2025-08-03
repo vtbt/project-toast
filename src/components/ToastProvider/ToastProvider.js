@@ -10,6 +10,11 @@ function ToastProvider({ children }) {
   }
 
   function handleDismissToast(toastId) {
+    // without toastId we will dismiss all toasts
+    if (toastId === undefined) {
+      setToastList([]);
+      return;
+    }
     const newToastList = toastList.filter((toast) => toast.id !== toastId);
     setToastList(newToastList);
   }
