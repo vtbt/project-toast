@@ -14,19 +14,7 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
 
-  const { addNewToast, handleDismissToast } = React.useContext(ToastContext);
-
-  React.useEffect(() => {
-    function handleKeydown(event) {
-      if (event.key === 'Escape') {
-        handleDismissToast();
-      }
-    }
-    window.addEventListener('keydown', handleKeydown);
-    return () => {
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  }, [handleDismissToast]);
+  const { addNewToast } = React.useContext(ToastContext);
 
   function handlePopToast(event) {
     event.preventDefault();
